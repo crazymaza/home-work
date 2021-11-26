@@ -2,7 +2,6 @@ package com.sbrf.reboot.repository;
 
 import com.sbrf.reboot.dao.Account;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -17,21 +16,23 @@ public class AccountRepositoryImpl implements AccountRepository {
     private final String path;
 
     @Override
-    @SneakyThrows
     public Set<Account> getAllAccountsByClientId(long clientId) {
         StringBuilder line = readingFromFile();
-        List<String> c = sortedBuilderLine(line);
-        List<Account> d = createAccountList(c);
-        return getAccountSet(clientId, d);
+        List<String> sortedStringList = sortedBuilderLine(line);
+        List<Account> accountList = createAccountList(sortedStringList);
+        return getAccountSet(clientId, accountList);
     }
 
-    private StringBuilder readingFromFile() throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+    private StringBuilder readingFromFile() {
         StringBuilder finalLine = new StringBuilder();
-        String readingLine;
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
+            String readingLine;
 
-        while ((readingLine = bufferedReader.readLine()) != null) {
-            finalLine.append(readingLine);
+            while ((readingLine = bufferedReader.readLine()) != null) {
+                finalLine.append(readingLine);
+            }
+        } catch (IOException e) {
+            System.out.printf("Can't reading file: %s.\n%s", path, e);
         }
         return finalLine;
     }
@@ -41,9 +42,9 @@ public class AccountRepositoryImpl implements AccountRepository {
                 .split("\\[|\\]|\\{|\\}");
         List<String> afterSortedList = new ArrayList<>();
 
-        for (String s : splitStringArray) {
-            if (!s.trim().isEmpty() && !s.trim().equals(",")) {
-                afterSortedList.add(s.trim());
+        for (String str : splitStringArray) {
+            if (!str.trim().isEmpty() && !str.trim().equals(",")) {
+                afterSortedList.add(str.trim());
             }
         }
         return afterSortedList;
@@ -51,9 +52,9 @@ public class AccountRepositoryImpl implements AccountRepository {
 
     private List<Account> createAccountList(List<String> sortedList) {
         List<Account> accountList = new ArrayList<>();
-        for (String s : sortedList) {
-            accountList.add(new Account(s.split(",\\s+")[1].replace("\"number\":", "").replace("\"", "").trim(),
-                    Long.parseLong(s.split(",\\s+")[0].replace("\"clientId\":", "").replace("\"", "").trim())));
+        for (String str : sortedList) {
+            accountList.add(new Account(str.split(",\\s+")[1].replace("\"number\":", "").replace("\"", "").trim(),
+                    Long.parseLong(str.split(",\\s+")[0].replace("\"clientId\":", "").replace("\"", "").trim())));
         }
         return accountList;
     }
