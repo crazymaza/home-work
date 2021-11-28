@@ -20,8 +20,7 @@ public class AccountUtils {
         if (sortDirection.equals(SortDirection.ASC)) {
             accounts.sort(Comparator.comparing(Account::getBalance));
         } else {
-            accounts.sort((o1, o2) ->
-                    o1.getBalance().intValueExact() > o2.getBalance().intValueExact() ? 1 : 0);
+            accounts.sort((o1, o2) -> o2.getBalance().compareTo(o1.getBalance()));
         }
     }
 }
