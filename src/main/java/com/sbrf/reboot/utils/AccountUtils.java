@@ -15,12 +15,8 @@ public class AccountUtils {
         accounts.sort((o1, o2) -> o1.getCreateDate().isBefore(o2.getCreateDate()) ? 1 : 0);
     }
 
-    public static void sortedByIdDateBalance(List<Account> accounts, SortDirection sortDirection) {
+    public static void sortedByIdDateBalance(List<Account> accounts) {
         sortedByIdDate(accounts);
-        if (sortDirection.equals(SortDirection.ASC)) {
-            accounts.sort(Comparator.comparing(Account::getBalance));
-        } else {
-            accounts.sort((o1, o2) -> o2.getBalance().compareTo(o1.getBalance()));
-        }
+        accounts.sort((o1, o2) -> o1.getBalance().compareTo(o2.getBalance()) == 0 ? 1 : 0);
     }
 }

@@ -14,10 +14,10 @@ class AccountUtilsTest {
     @Test
     void sortedByid() {
         List<Account> accounts = new ArrayList<Account>() {{
-            add(Account.builder().id(3L).createDate(LocalDate.now()).balance(BigDecimal.TEN).clientId("").build());
-            add(Account.builder().id(1L).createDate(LocalDate.now()).balance(BigDecimal.TEN).clientId("").build());
-            add(Account.builder().id(3L).createDate(LocalDate.now()).balance(BigDecimal.TEN).clientId("").build());
-            add(Account.builder().id(2L).createDate(LocalDate.now()).balance(BigDecimal.TEN).clientId("").build());
+            add(Account.builder().id(3L).createDate(LocalDate.now().minusDays(2)).balance(new BigDecimal("123")).clientId("").build());
+            add(Account.builder().id(1L).createDate(LocalDate.now().minusDays(3)).balance(new BigDecimal("321")).clientId("").build());
+            add(Account.builder().id(3L).createDate(LocalDate.now().minusDays(1)).balance(BigDecimal.TEN).clientId("").build());
+            add(Account.builder().id(2L).createDate(LocalDate.now()).balance(BigDecimal.ONE).clientId("").build());
         }};
 
         AccountUtils.sortedById(accounts);
@@ -51,28 +51,14 @@ class AccountUtilsTest {
         List<Account> accounts = new ArrayList<Account>() {{
             add(Account.builder().id(1L).createDate(LocalDate.now()).balance(BigDecimal.TEN).clientId("").build());
             add(Account.builder().id(3L).createDate(LocalDate.now()).balance(new BigDecimal("9")).clientId("").build());
-            add(Account.builder().id(3L).createDate(LocalDate.now()).balance(new BigDecimal("11")).clientId("").build());
+            add(Account.builder().id(3L).createDate(LocalDate.now().minusDays(2)).balance(new BigDecimal("11")).clientId("").build());
             add(Account.builder().id(2L).createDate(LocalDate.now()).balance(new BigDecimal("1")).clientId("").build());
+            add(Account.builder().id(2L).createDate(LocalDate.now().minusDays(1)).balance(new BigDecimal("2")).clientId("").build());
         }};
 
-        AccountUtils.sortedByIdDateBalance(accounts, SortDirection.ASC);
+        AccountUtils.sortedByIdDateBalance(accounts);
 
-        Assertions.assertEquals(1L, accounts.get(0).getBalance().longValueExact());
-        Assertions.assertEquals(9L, accounts.get(1).getBalance().longValueExact());
-    }
-
-    @Test
-    void sortedByIdDateAndBalanceDesc() {
-        List<Account> accounts = new ArrayList<Account>() {{
-            add(Account.builder().id(1L).createDate(LocalDate.now()).balance(BigDecimal.TEN).clientId("").build());
-            add(Account.builder().id(3L).createDate(LocalDate.now()).balance(new BigDecimal("9")).clientId("").build());
-            add(Account.builder().id(3L).createDate(LocalDate.now()).balance(new BigDecimal("11")).clientId("").build());
-            add(Account.builder().id(2L).createDate(LocalDate.now()).balance(new BigDecimal("1")).clientId("").build());
-        }};
-
-        AccountUtils.sortedByIdDateBalance(accounts, SortDirection.DESC);
-
-        Assertions.assertEquals(11L, accounts.get(0).getBalance().longValueExact());
-        Assertions.assertEquals(10L, accounts.get(1).getBalance().longValueExact());
+        Assertions.assertEquals(10L, accounts.get(0).getBalance().longValueExact());
+        Assertions.assertEquals(1L, accounts.get(1).getBalance().longValueExact());
     }
 }
