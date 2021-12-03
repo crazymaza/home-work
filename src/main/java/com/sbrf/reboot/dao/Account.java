@@ -22,4 +22,9 @@ public class Account {
     private Long id;
     private LocalDate createDate;
     private BigDecimal balance;
+
+    public Account(@NonNull String clientId, Long id) {
+        this.clientId = clientId;
+        this.id = id;
+    }
 }
