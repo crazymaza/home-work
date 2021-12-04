@@ -4,6 +4,7 @@ import com.sbrf.reboot.dao.Account;
 import lombok.RequiredArgsConstructor;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,14 +17,14 @@ public class AccountRepositoryImpl implements AccountRepository {
     private final String path;
 
     @Override
-    public Set<Account> getAllAccountsByClientId(long clientId) {
+    public Set<Account> getAllAccountsByClientId(long clientId) throws IOException {
         StringBuilder line = readingFromFile();
         List<String> sortedStringList = sortedBuilderLine(line);
         List<Account> accountList = createAccountList(sortedStringList);
         return getAccountSet(clientId, accountList);
     }
 
-    private StringBuilder readingFromFile() {
+    private StringBuilder readingFromFile() throws IOException {
         StringBuilder finalLine = new StringBuilder();
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
             String readingLine;
@@ -31,8 +32,6 @@ public class AccountRepositoryImpl implements AccountRepository {
             while ((readingLine = bufferedReader.readLine()) != null) {
                 finalLine.append(readingLine);
             }
-        } catch (IOException e) {
-            System.out.printf("Can't reading file: %s.\n%s", path, e);
         }
         return finalLine;
     }
@@ -63,7 +62,7 @@ public class AccountRepositoryImpl implements AccountRepository {
         if (accountList.isEmpty()) return null;
         Set<Account> accountSet = new HashSet<>();
         for (Account account : accountList) {
-            if (account.getClientId() == clientId) {
+            if (account.getId() == clientId) {
                 accountSet.add(account);
             }
         }

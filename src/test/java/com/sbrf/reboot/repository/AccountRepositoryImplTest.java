@@ -4,6 +4,7 @@ import com.sbrf.reboot.dao.Account;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -15,9 +16,8 @@ class AccountRepositoryImplTest {
 
     AccountRepository accountRepository;
 
-
     @Test
-    void onlyPersonalAccounts() {
+    void onlyPersonalAccounts() throws IOException {
         accountRepository = new AccountRepositoryImpl("src/main/resources/Accounts.txt");
         Set<Account> allAccountsByClientId = accountRepository.getAllAccountsByClientId(1L);
         ArrayList<String> strings = new ArrayList<String>() {{
@@ -26,15 +26,15 @@ class AccountRepositoryImplTest {
             add("4-ACC1NUM");
         }};
 
-        allAccountsByClientId.forEach(e -> assertTrue(strings.contains(e.getNumber())));
+        allAccountsByClientId.forEach(e -> assertTrue(strings.contains(e.getClientId())));
     }
 
     @Test
-    void successGetAllAccountsByClientId() {
+    void successGetAllAccountsByClientId() throws IOException {
         accountRepository = new AccountRepositoryImpl("src/main/resources/Accounts.txt");
         Set<Account> allAccountsByClientId = accountRepository.getAllAccountsByClientId(1L);
 
-        assertEquals(1, (int) allAccountsByClientId.stream().filter(e -> e.getNumber().equals("4-ACC1NUM")).count());
+        assertEquals(1, (int) allAccountsByClientId.stream().filter(e -> e.getClientId().equals("4-ACC1NUM")).count());
     }
 
     @Test
@@ -44,6 +44,4 @@ class AccountRepositoryImplTest {
             accountRepository.getAllAccountsByClientId(1L);
         });
     }
-
-
 }
