@@ -1,22 +1,18 @@
 package com.sbrf.reboot.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sbrf.reboot.dto.Request;
-import com.sbrf.reboot.dto.Response;
-import lombok.SneakyThrows;
+import com.sbrf.reboot.dao.Request;
+import com.sbrf.reboot.dao.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class XMLUtilsTest {
 
-    @SneakyThrows
     @Test
     void toXMLRequest() {
         Request request = new Request("ATM12345");
         Assertions.assertTrue(XMLUtils.toXML(request).contains("atmNumber"));
     }
 
-    @SneakyThrows
     @Test
     void toXMLResponse() {
         Response response = new Response("SUCCESS");
@@ -24,15 +20,14 @@ class XMLUtilsTest {
     }
 
     @Test
-    void XMLtoRequest() throws JsonProcessingException {
+    void XMLtoRequest() {
         Request request = XMLUtils.XMLtoRequest("<Request><atmNumber>ATM12345</atmNumber></Request>");
         Assertions.assertEquals("ATM12345", request.getAtmNumber());
     }
 
     @Test
-    void XMLtoResponse() throws JsonProcessingException {
+    void XMLtoResponse() {
         Response request = XMLUtils.XMLtoResponse("<Response><statusCode>SUCCESS</statusCode></Response>");
         Assertions.assertEquals("SUCCESS", request.getStatusCode());
     }
-
 }
