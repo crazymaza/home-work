@@ -7,7 +7,7 @@ import java.util.List;
 
 public class AccountUtils {
     public static void sortedById(List<Account> accounts) {
-        accounts.sort(Comparator.comparing(Account::getId));
+        accounts.sort(Comparator.comparing(Account::getNumber));
     }
 
     public static void sortedByIdDate(List<Account> accounts) {

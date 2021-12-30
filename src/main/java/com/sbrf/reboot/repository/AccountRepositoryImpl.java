@@ -4,7 +4,6 @@ import com.sbrf.reboot.dao.Account;
 import lombok.RequiredArgsConstructor;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,8 +51,8 @@ public class AccountRepositoryImpl implements AccountRepository {
     private List<Account> createAccountList(List<String> sortedList) {
         List<Account> accountList = new ArrayList<>();
         for (String str : sortedList) {
-            accountList.add(new Account(str.split(",\\s+")[1].replace("\"number\":", "").replace("\"", "").trim(),
-                    Long.parseLong(str.split(",\\s+")[0].replace("\"clientId\":", "").replace("\"", "").trim())));
+            accountList.add(new Account(Long.parseLong(str.split(",\\s+")[0].replace("\"clientId\":", "").replace("\"", "").trim()),
+                    str.split(",\\s+")[1].replace("\"number\":", "").replace("\"", "").trim()));
         }
         return accountList;
     }
@@ -62,7 +61,7 @@ public class AccountRepositoryImpl implements AccountRepository {
         if (accountList.isEmpty()) return null;
         Set<Account> accountSet = new HashSet<>();
         for (Account account : accountList) {
-            if (account.getId() == clientId) {
+            if (account.getClientId() == clientId) {
                 accountSet.add(account);
             }
         }
