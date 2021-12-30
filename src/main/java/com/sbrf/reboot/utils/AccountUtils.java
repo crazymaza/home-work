@@ -11,12 +11,25 @@ public class AccountUtils {
     }
 
     public static void sortedByIdDate(List<Account> accounts) {
-        sortedById(accounts);
-        accounts.sort((o1, o2) -> o1.getCreateDate().isBefore(o2.getCreateDate()) ? 1 : 0);
+        accounts.sort((o1, o2) -> {
+            int compare = o1.getCreateDate().compareTo(o2.getCreateDate());
+            return compare != 0
+                    ? compare
+                    : -o1.getId().compareTo(o2.getId());
+        });
     }
 
     public static void sortedByIdDateBalance(List<Account> accounts) {
-        sortedByIdDate(accounts);
-        accounts.sort((o1, o2) -> o1.getBalance().compareTo(o2.getBalance()) == 0 ? 1 : 0);
+        accounts.sort((o1, o2) -> {
+            int compareBal = o1.getBalance().compareTo(o2.getBalance());
+            if (compareBal == 0) {
+                int compareDate = o1.getCreateDate().compareTo(o2.getCreateDate());
+                if (compareDate == 0) {
+                    return o1.getId().compareTo(o2.getId());
+                }
+                return compareDate;
+            }
+            return compareBal;
+        });
     }
 }

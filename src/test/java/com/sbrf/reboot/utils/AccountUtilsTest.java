@@ -44,6 +44,7 @@ class AccountUtilsTest {
         Assertions.assertEquals("2L", accounts.get(1).getNumber());
         Assertions.assertEquals(LocalDate.now().minusDays(3), accounts.get(2).getCreateDate());
         Assertions.assertEquals(LocalDate.now().minusDays(1), accounts.get(3).getCreateDate());
+
     }
 
     @Test
@@ -58,7 +59,9 @@ class AccountUtilsTest {
 
         AccountUtils.sortedByIdDateBalance(accounts);
 
-        Assertions.assertEquals(10L, accounts.get(0).getBalance().longValueExact());
-        Assertions.assertEquals(1L, accounts.get(1).getBalance().longValueExact());
+        Assertions.assertEquals(1L, accounts.get(0).getBalance().longValueExact());
+        Assertions.assertEquals(2L, accounts.get(1).getBalance().longValueExact());
+        Assertions.assertEquals(LocalDate.now().minusDays(1), accounts.get(3).getCreateDate());
+        Assertions.assertEquals(LocalDate.now(), accounts.get(4).getCreateDate());
     }
 }
