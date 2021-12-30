@@ -41,15 +41,16 @@ class AccountUtilsTest {
         AccountUtils.sortedByIdDate(accounts);
 
         Assertions.assertEquals(1L, accounts.get(0).getId());
-        Assertions.assertEquals(2L, accounts.get(1).getId());
-        Assertions.assertEquals(LocalDate.now().minusDays(3), accounts.get(2).getCreateDate());
-        Assertions.assertEquals(LocalDate.now().minusDays(1), accounts.get(3).getCreateDate());
+        Assertions.assertEquals(3L, accounts.get(1).getId());
+        Assertions.assertEquals(LocalDate.now().minusDays(3), accounts.get(1).getCreateDate());
+        Assertions.assertEquals(LocalDate.now().minusDays(1), accounts.get(2).getCreateDate());
     }
 
     @Test
     void sortedByIdDateAndBalanceAsc() {
         List<Account> accounts = new ArrayList<Account>() {{
             add(Account.builder().id(1L).createDate(LocalDate.now()).balance(BigDecimal.TEN).clientId("").build());
+            add(Account.builder().id(1L).createDate(LocalDate.now().minusDays(1)).balance(BigDecimal.TEN).clientId("").build());
             add(Account.builder().id(3L).createDate(LocalDate.now()).balance(new BigDecimal("9")).clientId("").build());
             add(Account.builder().id(3L).createDate(LocalDate.now().minusDays(2)).balance(new BigDecimal("11")).clientId("").build());
             add(Account.builder().id(2L).createDate(LocalDate.now()).balance(new BigDecimal("1")).clientId("").build());
@@ -58,7 +59,9 @@ class AccountUtilsTest {
 
         AccountUtils.sortedByIdDateBalance(accounts);
 
-        Assertions.assertEquals(10L, accounts.get(0).getBalance().longValueExact());
-        Assertions.assertEquals(1L, accounts.get(1).getBalance().longValueExact());
+        Assertions.assertEquals(1L, accounts.get(0).getBalance().longValueExact());
+        Assertions.assertEquals(2L, accounts.get(1).getBalance().longValueExact());
+        Assertions.assertEquals(LocalDate.now().minusDays(1), accounts.get(3).getCreateDate());
+        Assertions.assertEquals(LocalDate.now(), accounts.get(4).getCreateDate());
     }
 }
