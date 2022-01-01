@@ -15,7 +15,7 @@ public class AccountUtils {
             int compare = o1.getCreateDate().compareTo(o2.getCreateDate());
             return compare != 0
                     ? compare
-                    : -o1.getId().compareTo(o2.getId());
+                    : -o1.getClientId().compareTo(o2.getClientId());
         });
     }
 
@@ -25,7 +25,7 @@ public class AccountUtils {
             if (compareBal == 0) {
                 int compareDate = o1.getCreateDate().compareTo(o2.getCreateDate());
                 if (compareDate == 0) {
-                    return o1.getId().compareTo(o2.getId());
+                    return o1.getClientId().compareTo(o2.getClientId());
                 }
                 return compareDate;
             }
