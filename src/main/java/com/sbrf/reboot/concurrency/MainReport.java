@@ -9,18 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MainReport {
     public long getTotalsWithCompletableFuture(Stream<Customer> stream) {
         return CompletableFuture.supplyAsync(() -> {
-            Set<Customer> filteredCustomers = getFilteredCustomers(stream);
-
-            List<Account> accounts = new ArrayList<>();
-            filteredCustomers.forEach(customer -> accounts.addAll(customer.getAccounts()));
-            return accounts;
-        }).thenApply(this::getAccountsValuesSum).join();
+            List<Account> accountList = new ArrayList<>();
+            getFilteredCustomers(stream)
+                    .forEach(customer -> accountList.addAll(customer.getAccounts()));
+            return accountList;
+        }, Executors.newWorkStealingPool()).thenApply(this::getAccountsValuesSum).join();
     }
 
     public long getTotalsWithReact(Stream<Customer> stream) {
