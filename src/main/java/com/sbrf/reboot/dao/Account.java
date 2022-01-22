@@ -17,14 +17,18 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class Account {
     @NonNull
-    private String clientId;
+    private Long clientId;
 
-    private Long id;
+    private String number;
     private LocalDate createDate;
     private BigDecimal balance;
 
-    public Account(@NonNull String clientId, Long id) {
+    public Account(Long clientId, String number) {
         this.clientId = clientId;
-        this.id = id;
+        this.number = number;
+    }
+
+    public Account(String number) {
+        this.number = number;
     }
 }
