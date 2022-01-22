@@ -9,18 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MainReport {
     public long getTotalsWithCompletableFuture(Stream<Customer> stream) {
-        return CompletableFuture.supplyAsync(() -> {
-            List<Account> accountList = new ArrayList<>();
-            getFilteredCustomers(stream)
-                    .forEach(customer -> accountList.addAll(customer.getAccounts()));
-            return accountList;
-        }, Executors.newWorkStealingPool()).thenApply(this::getAccountsValuesSum).join();
+        CompletableFuture<List<Account>> completableFutureList = getCompletableFutureList(stream);
+        List<Account> accountList = CompletableFuture.allOf(completableFutureList)
+                .thenApply(v -> new ArrayList<>(completableFutureList.join()))
+                .join();
+        return getAccountsValuesSum(accountList);
     }
 
     public long getTotalsWithReact(Stream<Customer> stream) {
@@ -37,6 +35,15 @@ public class MainReport {
         flux.subscribe();
 
         return flux.blockFirst();
+    }
+
+    private CompletableFuture<List<Account>> getCompletableFutureList(Stream<Customer> stream) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<Account> accountList = new ArrayList<>();
+            getFilteredCustomers(stream)
+                    .forEach(customer -> accountList.addAll(customer.getAccounts()));
+            return accountList;
+        });
     }
 
     private Set<Customer> getFilteredCustomers(Stream<Customer> customerStream) {
