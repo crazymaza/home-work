@@ -11,10 +11,12 @@ import java.io.PrintWriter;
 
 @WebServlet("/ask")
 public class HelloServlet extends HttpServlet {
+    private Integer visitCounter;
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
-        Integer visitCounter = (Integer) session.getAttribute("visitCounter");
+        visitCounter = (Integer) session.getAttribute("visitCounter");
         if (visitCounter == null) {
             visitCounter = 1;
         } else {
