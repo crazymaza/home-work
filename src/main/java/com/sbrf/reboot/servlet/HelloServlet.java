@@ -1,6 +1,5 @@
 package com.sbrf.reboot.servlet;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -8,22 +7,21 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @WebServlet("/ask")
 public class HelloServlet extends HttpServlet {
-    private Integer visitCounter;
+    private final AtomicInteger visitCounter = new AtomicInteger(1);
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
-        visitCounter = (Integer) session.getAttribute("visitCounter");
-        if (visitCounter == null) {
-            visitCounter = 1;
-        } else {
-            visitCounter++;
+        Integer counter = (Integer) session.getAttribute("visitCounter");
+        if (counter != 0) {
+            visitCounter.getAndIncrement();
         }
 
-        session.setAttribute("visitCounter", visitCounter);
+        session.setAttribute("visitCounter", visitCounter.get());
         String userName = req.getParameter("name");
         resp.setContentType("text/html");
         try {
