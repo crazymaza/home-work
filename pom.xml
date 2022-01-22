@@ -36,6 +36,8 @@
 
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
+        <servlet-api.version>4.0.1</servlet-api.version>
+
     </properties>
 
     <dependencies>
@@ -66,6 +68,11 @@
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
             <version>${jackson-dataformat-xml.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet-api.version}</version>
         </dependency>
     </dependencies>
 
